@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  access-api:
+    build:
+      target: development
+    volumes:
+      - ../src:/usr/access-api/src
+      - ../.env:/usr/access-api/.env
+    command: yarn dev
+    networks:
+      - apps_network
+
+networks:
+  apps_network:
+    driver: bridge

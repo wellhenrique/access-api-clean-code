@@ -1,0 +1,19 @@
+FROM node:16.15-alpine as base
+
+WORKDIR /usr/access-api/
+RUN touch /usr/access-api/.env
+COPY package.json yarn.lock tsconfig.json ./
+RUN yarn
+
+COPY ./src ./src
+
+FROM base as development
+
+ENV NODE_ENV=development
+
+FROM base as build
+
+ENV NODE_ENV=production
+RUN yarn build
+
+FROM build as production

@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "noEmit": false,
+    "allowJs": true,
+    "strict": true,
+    "outDir": "build",
+    "module": "commonjs",
+    "target": "es6",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": "src",
+    "typeRoots": ["node_modules/@types", "src/@types"],
+    "paths": {
+      "@/*": ["*"]
+    }
+  },
+  "include": ["src"]
+}
