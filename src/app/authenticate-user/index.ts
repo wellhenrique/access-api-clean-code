@@ -4,8 +4,8 @@ import { MissingDomainParamError } from "../errors/missing-domain-param";
 
 export class AuthenticateUserUseCase implements UseCase<AuthenticateUserDTO, Promise<void>> {
   async exec(props: AuthenticateUserDTO): Promise<void> {
-    console.log('props: ', props)
     if(!props?.email) throw new MissingDomainParamError('email');
+    if(!props?.password) throw new MissingDomainParamError('password');
     
     return Promise.resolve();
   }

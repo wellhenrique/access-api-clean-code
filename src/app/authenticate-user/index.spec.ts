@@ -9,7 +9,8 @@ const makeSut = () => {
 }
 
 const makeFakeUser = () => ({
-  email: faker.internet.email()
+  email: faker.internet.email(),
+  password: faker.internet.password()
 })
 
 describe('AuthenticateUserUseCase', () => {
@@ -26,5 +27,14 @@ describe('AuthenticateUserUseCase', () => {
     const response = authenticateUserUseCaseSpy.exec(props as AuthenticateUserDTO);
 
     await expect(response).rejects.toThrow(new MissingDomainParamError('email'));
+  })
+
+  it("should return throw MissingParamError when user password isn't provided", async () => {
+    const { authenticateUserUseCaseSpy } = makeSut();
+    const  { password, ...props} = makeFakeUser();
+
+    const response = authenticateUserUseCaseSpy.exec(props as AuthenticateUserDTO);
+
+    await expect(response).rejects.toThrow(new MissingDomainParamError('password'));
   })
 })
