@@ -1,3 +1,4 @@
-import { UseCase } from '@/contracts/usecase'
+import { AuthenticateUser } from '@/contracts/usecase'
+import { GetUserByEmailRepository, VerifyUserPasswordRepository, VerifyUserPasswordDTO } from '@/contracts/repository'
 
-export { UseCase }
+export { AuthenticateUser, GetUserByEmailRepository, VerifyUserPasswordRepository, VerifyUserPasswordDTO }

@@ -3,18 +3,23 @@ import { MissingDomainParamError } from "../errors/missing-domain-param";
 import {faker} from '@faker-js/faker'
 import { AuthenticateUserUseCase } from ".";
 import { UserNotFoundError } from "../errors/user-not-found";
-import { Repository } from "@/contracts/repository";
+import { GetUserByEmailRepository, VerifyUserPasswordDTO, VerifyUserPasswordRepository } from "@/contracts";
 import { User } from "@/domain/user";
 import { InvalidDomainParamError } from "../errors/invalid-domain-param";
 
 const usersInMemory: User[] = [];
 
-class GetUserByEmailRepositoryStub implements Repository<string, Promise<User | undefined>> {
+class GetUserByEmailRepositoryStub implements GetUserByEmailRepository {
   async handle(email: string): Promise<User | undefined> {
     const user = usersInMemory.find(user => user?.email === email);
     return user;
   }
-  
+}
+
+class VerifyUserPasswordRepositoryStub implements VerifyUserPasswordRepository {
+  handle({ password, userPassword }: VerifyUserPasswordDTO): Promise<boolean> {
+    return Promise.resolve(password === userPassword);
+  }
 }
 
 const makeFakeUser = () => ({
@@ -24,7 +29,13 @@ const makeFakeUser = () => ({
 
 const makeSut = () => {
   const getUserByEmailRepositoryStub = new GetUserByEmailRepositoryStub();
-  const authenticateUserUseCaseSpy = new AuthenticateUserUseCase(getUserByEmailRepositoryStub)
+  const verifyUserPasswordRepositoryStub = new VerifyUserPasswordRepositoryStub();
+
+  const authenticateUserUseCaseSpy = new AuthenticateUserUseCase(
+    getUserByEmailRepositoryStub,
+    verifyUserPasswordRepositoryStub
+  )
+  
   return { authenticateUserUseCaseSpy }
 }
 
@@ -79,5 +90,20 @@ describe('AuthenticateUserUseCase', () => {
     const response = authenticateUserUseCaseSpy.exec(props as AuthenticateUserDTO);
 
     await expect(response).rejects.toThrow(new UserNotFoundError());
+  })
+
+  it("should return throw InvalidDomainParamError if the provided password is not match from the user's password", async () => {
+    const { authenticateUserUseCaseSpy } = makeSut();
+    const  fakeProps = makeFakeUser();
+    usersInMemory.push(fakeProps);
+
+    const props = {
+      ...fakeProps,
+      password: 'invalidPassword'
+    }
+
+    const response = authenticateUserUseCaseSpy.exec(props as AuthenticateUserDTO);
+
+    await expect(response).rejects.toThrow(new InvalidDomainParamError('email or password'));
   })
 })
