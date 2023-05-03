@@ -5,6 +5,7 @@ import { AuthenticateUserUseCase } from ".";
 import { UserNotFoundError } from "../errors/user-not-found";
 import { Repository } from "@/contracts/repository";
 import { User } from "@/domain/user";
+import { InvalidDomainParamError } from "../errors/invalid-domain-param";
 
 const usersInMemory: User[] = [];
 
@@ -52,8 +53,21 @@ describe('AuthenticateUserUseCase', () => {
     await expect(response).rejects.toThrow(new MissingDomainParamError('password'));
   })
 
-  
-  it("should return throw UserNotFoundError when user doesn't exist ", async () => {
+  it("should return throw InvalidDomainParamError when user.email is invalid", async () => {
+    const { authenticateUserUseCaseSpy } = makeSut();
+    const fakeProps = makeFakeUser();
+
+    const props = {
+      ...fakeProps,
+      email: 'invalidEmail'
+    }
+
+    const response = authenticateUserUseCaseSpy.exec(props as AuthenticateUserDTO);
+
+    await expect(response).rejects.toThrow(new InvalidDomainParamError('email'));
+  })
+
+  it("should return throw UserNotFoundError when user doesn't exist", async () => {
     const { authenticateUserUseCaseSpy } = makeSut();
     const  fakeProps = makeFakeUser();
 
