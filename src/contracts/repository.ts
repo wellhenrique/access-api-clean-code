@@ -4,10 +4,10 @@ export interface Repository<Input, Output> {
   handle(params?: Input): Output
 }
 
-export type GetUserByEmailRepository = Repository<string, Promise<User | undefined>>
+export type GetUserByEmailRepository = Repository<string, Promise<User | null>>
 
-export type VerifyUserPassword = {
+export type VerifyUserPasswordDTO = {
   password: string;
   userPassword: string;
 }
-export type VerifyUserPasswordRepository = Repository<VerifyUserPassword, Promise<boolean>>
+export type VerifyUserPasswordRepository = Repository<VerifyUserPasswordDTO, Promise<boolean>>
