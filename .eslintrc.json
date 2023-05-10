@@ -44,7 +44,9 @@
     "no-empty-function": [
       "error",
       {
-        "allow": ["constructors"]
+        "allow": [
+          "constructors"
+        ]
       }
     ],
     "import-helpers/order-imports": [
@@ -56,8 +58,14 @@
           "module",
           "type",
           "/^@//",
-          ["absolute", "parent"],
-          ["sibling", "index"]
+          [
+            "absolute",
+            "parent"
+          ],
+          [
+            "sibling",
+            "index"
+          ]
         ],
         "alphabetize": {
           "order": "asc",
@@ -69,36 +77,57 @@
       "error",
       {
         "selector": "typeLike",
-        "format": ["PascalCase"]
+        "format": [
+          "PascalCase"
+        ]
       },
       {
         "selector": "property",
-        "format": ["camelCase"]
+        "format": [
+          "camelCase"
+        ]
       },
       {
         "selector": "function",
-        "format": ["camelCase"]
+        "format": [
+          "camelCase"
+        ]
       },
       {
         "selector": "function",
-        "modifiers": ["exported"],
-        "format": ["camelCase", "PascalCase"]
+        "modifiers": [
+          "exported"
+        ],
+        "format": [
+          "camelCase",
+          "PascalCase"
+        ]
       },
       {
         "selector": "variable",
-        "format": ["camelCase", "UPPER_CASE"],
+        "format": [
+          "camelCase",
+          "UPPER_CASE"
+        ],
         "leadingUnderscore": "allow",
         "trailingUnderscore": "allow"
       },
       {
         "selector": "variable",
-        "modifiers": ["destructured"],
+        "modifiers": [
+          "destructured"
+        ],
         "format": null
       },
       {
         "selector": "variable",
-        "modifiers": ["exported"],
-        "format": ["camelCase", "PascalCase"]
+        "modifiers": [
+          "exported"
+        ],
+        "format": [
+          "camelCase",
+          "PascalCase"
+        ]
       }
     ],
     "prettier/prettier": [
@@ -113,6 +142,9 @@
     "import/resolver": {
       "typescript": {}
     },
-    "import/core-modules": ["@expo/vector-icons"]
+    "import/core-modules": [
+      "@expo/vector-icons",
+      "expo-file-system"
+    ]
   }
 }
