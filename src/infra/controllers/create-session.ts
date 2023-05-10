@@ -1,18 +1,19 @@
 import { GetTokenTypeUseCase } from "@/app/get-token-type";
-import { ValidateUser } from "@/contracts"
-import { CreateSession, RequestType } from "@/contracts/controller"
+import { Controller, HttpRequest, HttpResponse, ValidateUser } from "@/contracts"
 import { CreateNewSession } from "@/contracts/usecase";
+import { created } from "../helpers/http-helper";
 
-export class CreateSessionController implements CreateSession {
+export class CreateSessionController implements Controller {
   constructor(
     private readonly validateUserUseCase: ValidateUser,
     private readonly createNewSessionUseCase: CreateNewSession,
     private readonly getTokenTypeUseCase: GetTokenTypeUseCase,
   ) {}
 
-  async handle(params: RequestType): Promise<string> {
+  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const { email, password, neverExpire } = params.request.body
+      const { email, password, neverExpire } = httpRequest.body
+
       const user = await this.validateUserUseCase.exec({
         email,
         password
@@ -24,9 +25,9 @@ export class CreateSessionController implements CreateSession {
       });
 
       const { accessToken, token } = await this.createNewSessionUseCase.exec({ user, tokenType });
-      return accessToken;
+      return created({accessToken: accessToken });
     } catch (error) {
-      return ''
+      throw new Error();
     }
   }
 }
